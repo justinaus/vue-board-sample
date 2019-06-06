@@ -1,0 +1,1 @@
+export const SAMPLE_LIST_MUTATION    = 'SAMPLE_LIST_MUTATION';

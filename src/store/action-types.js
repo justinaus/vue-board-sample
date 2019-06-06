@@ -1,0 +1,1 @@
+export const GET_SAMPLE_LIST_ACTION    = 'GET_SAMPLE_LIST_ACTION';
