@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <Board :dataList='list' @onChangedPageNum='onChangedPageNum'>
+    <Board :dataList='list' @onChangedPageIndex='onChangedPageIndex'>
       <tr slot="tr">
         <th>id</th>
         <th>userId</th>
@@ -37,9 +37,9 @@ export default {
     })
   },
   methods: {
-    onChangedPageNum( nPageNum ) {
-      const startIndex = this.rowCount * ( nPageNum - 1 );
-
+    onChangedPageIndex( nPageIndex ) {
+      const startIndex = this.rowCount * nPageIndex;
+      
       const urlRest = `posts?_start=${ startIndex }&_limit=${ this.rowCount }`;
 
       this.$store.dispatch( GET_SAMPLE_LIST_ACTION, urlRest );

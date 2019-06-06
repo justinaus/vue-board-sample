@@ -1,14 +1,14 @@
 <template>
   <fragment>
-    <button>prev end</button>
+    <button>-10</button>
     <button>prev</button>
     <fragment v-for="n in paginationCount" :key='n'>
       <button 
-        :class='{ selected: selectedPageNum === n }'
-        @click="() => onClickNum( n )">{{ n }}</button>
+        :class='{ selected: selectedPageIndex === startPageIndex + n - 1 }'
+        @click="() => onClickNum( startPageIndex + n - 1 )">{{ startPageIndex + n }}</button>
     </fragment>
-    <button>next</button>
-    <button>next end</button>
+    <button @click='onClickNext'>next</button>
+    <button>+10</button>
   </fragment>
 </template>
 
@@ -16,16 +16,16 @@
 export default {
   name: 'Pagination',
   props: {
-    selectedPageNum: Number // start from 1
-  }, 
-  data() {
-    return {
-      paginationCount: 10
-    }
+    paginationCount:Number,
+    startPageIndex:Number,
+    selectedPageIndex: Number
   },
   methods: {
-    onClickNum( n ) {
-      this.$emit( 'onClickPageNum', n );
+    onClickNum( pageIndex ) {
+      this.$emit( 'onClickPageNum', pageIndex );
+    },
+    onClickNext() {
+      this.$emit( 'onClickPageNum', this.selectedPageIndex + 1 );
     }
   }
 }
