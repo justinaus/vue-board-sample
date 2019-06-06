@@ -1,22 +1,25 @@
 <template>
   <fragment>
-    <Table :dataList='dataList'>
-      <template slot-scope="{rowData}">
-        <slot :rowData='rowData'></slot>
-      </template>
-    </Table>
+    <table>
+      <thead>
+        <slot name="tr" />
+      </thead>
+      <tbody>
+        <fragment v-for="item in dataList" :key='item.id'>
+          <slot name="row" :rowData='item'></slot>
+        </fragment>
+      </tbody>
+    </table>
     <Pagination :selectedPageNum='currentPageNum' @onClickPageNum='onClickPageNum' />
   </fragment>
 </template>
 
 <script>
-import Table from './Table'
 import Pagination from './Pagination'
 
 export default {
   name: 'Board',
   components: {
-    Table,
     Pagination
   },
   props: {
@@ -44,5 +47,8 @@ export default {
 </script>
 
 <style scoped>
-
+td {
+  border-bottom: 1px solid green;
+  height: 20px;
+}
 </style>

@@ -1,7 +1,13 @@
 <template>
   <div id="app">
     <Board :dataList='list' @onChangedPageNum='onChangedPageNum'>
-      <template slot-scope="{rowData}">
+      <tr slot="tr">
+        <th>id</th>
+        <th>userId</th>
+        <th>title</th>
+        <th>date</th>
+      </tr>
+      <template slot="row" slot-scope="{rowData}">
         <SampleRow :rowData="rowData"></SampleRow>
       </template>
     </Board>
@@ -22,7 +28,7 @@ export default {
   },
   data() {
     return {
-      rowCount: 10
+      rowCount: 5
     }
   },
   computed: {
