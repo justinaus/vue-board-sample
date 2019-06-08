@@ -15,13 +15,16 @@
       :startPageIndex='startPageIndex'
       :showPageCount='showPageCount'
       :selectedPageIndex='currentPageIndex'
-      :enabledFirst='true'
+      :enabledFirst='enabledFirst'
       :enabledEnd='true'
       :enabledPrevPage='true'
       :enabledNextPage='true'
       :enabledPrevGroup='true'
       :enabledNextGroup='true'
-      @onClickPageNum='onClickPageNum' />
+      @onClickPageNum='onClickPageNum'
+      @onClickEndPage='onClickEndPage'
+      @onClickPrevGroup='onClickPrevGroup'
+      @onClickNextGroup='onClickNextGroup' />
   </div>
 </template>
 
@@ -43,32 +46,62 @@ export default {
   computed: {
     paginationGroupIndex() {
       const result = Math.floor( this.currentPageIndex / this.maxPaginationCount );
-
       return result;
     },
     startPageIndex() {
       const result = this.paginationGroupIndex * this.maxPaginationCount;
+      return result;
+    },
+    endPageIndex() {
+      if( this.totalItemCount === 0 ) {
+        return 0;
+      }
+      
+      let result = this.startPageIndex + this.maxPaginationCount - 1;
+
+      console.log( result );   // 9
+
+      const lastItemIndex = this.totalItemCount - 1;
+
+      if( result > lastItemIndex ) {
+        result = lastItemIndex;
+      }
 
       return result;
     },
     showPageCount() {
-      if( this.totalItemCount === 0 ) {
-        return 0;
-      }
-      let endPageIndex = this.startPageIndex + this.maxPaginationCount - 1;
-
-      const lastItemIndex = this.totalItemCount - 1;
-
-      if( endPageIndex > lastItemIndex ) {
-        endPageIndex = lastItemIndex;
-      }
-
-      return endPageIndex - this.startPageIndex + 1;
+      const result = this.endPageIndex - this.startPageIndex + 1;
+      return result;
+    },
+    enabledFirst() {
+      return this.currentPageIndex !== 0;
     }
   },
   methods: {
+    onChangePage( pageIndex ) {
+      this.$emit( 'onChangePage', pageIndex );
+    },
     onClickPageNum( pageIndex ) {
-      this.$emit( 'onClickPageNum', pageIndex );
+      this.onChangePage( pageIndex );
+    },
+    onClickEndPage() {
+      if( this.totalItemCount === 0 ) {
+        return;
+      }
+
+      const lastPageIndex = Math.floor( ( this.totalItemCount - 1 ) / this.maxRowCount );
+
+      this.onChangePage( lastPageIndex );
+    },
+    onClickPrevGroup() {
+      const toGroupIndex = this.paginationGroupIndex - 1;
+
+      this.onChangePage( toGroupIndex * this.maxPaginationCount );
+    },
+    onClickNextGroup() {
+      const toGroupIndex = this.paginationGroupIndex + 1;
+
+      this.onChangePage( toGroupIndex * this.maxPaginationCount );
     }
   }
 }

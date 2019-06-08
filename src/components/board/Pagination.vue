@@ -1,16 +1,16 @@
 <template>
   <div>
-    <button :disabled='!enabledFirst'>first</button>
-    <button :disabled='!enabledPrevGroup'>-10</button>
-    <button :disabled='!enabledPrevPage'>prev</button>
+    <button :disabled='!enabledFirst' @click='onClickFirstPage'>first</button>
+    <button :disabled='!enabledPrevGroup' @click='onClickPrevGroup'>&#60;</button>
+    <button :disabled='!enabledPrevPage' @click='onClickPrevPage'>prev</button>
     <span v-for="n in showPageCount" :key='n'>
       <button 
         :class='{ selected: selectedPageIndex === startPageIndex + n - 1 }'
         @click="() => onClickNum( startPageIndex + n - 1 )">{{ startPageIndex + n }}</button>
     </span>
     <button :disabled='!enabledNextPage' @click='onClickNextPage'>next</button>
-    <button :disabled='!enabledNextGroup'>+10</button>
-    <button :disabled='!enabledEnd'>end</button>
+    <button :disabled='!enabledNextGroup' @click='onClickNextGroup'>&#62;</button>
+    <button :disabled='!enabledEnd' @click='onClickEndPage'>end</button>
   </div>
 </template>
 
@@ -29,11 +29,29 @@ export default {
     enabledNextGroup: Boolean,
   },
   methods: {
+    dispatchPageClicked( toPageIndex ) {
+      this.$emit( 'onClickPageNum', toPageIndex );
+    },
     onClickNum( pageIndex ) {
-      this.$emit( 'onClickPageNum', pageIndex );
+      this.dispatchPageClicked( pageIndex );
     },
     onClickNextPage() {
-      this.$emit( 'onClickPageNum', this.selectedPageIndex + 1 );
+      this.dispatchPageClicked( this.selectedPageIndex + 1 );
+    },
+    onClickPrevPage() {
+      this.dispatchPageClicked( this.selectedPageIndex - 1 );
+    },
+    onClickFirstPage() {
+      this.dispatchPageClicked( 0 );
+    },
+    onClickEndPage() {
+      this.$emit( 'onClickEndPage' );
+    },
+    onClickPrevGroup() {
+      this.$emit( 'onClickPrevGroup' );
+    },
+    onClickNextGroup() {
+      this.$emit( 'onClickNextGroup' );
     }
   }
 }

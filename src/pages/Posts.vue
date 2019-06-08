@@ -6,7 +6,7 @@
       :maxRowCount='MAX_ROW_COUNT'
       :maxPaginationCount='MAX_PAGINATION_COUNT'
       :totalItemCount='totalCount'
-      @onClickPageNum='onClickPageNum'>
+      @onChangePage='onChangePage'>
       <tr slot="tr">
         <th>id</th>
         <th>userId</th>
@@ -69,7 +69,7 @@ export default {
       this.list = result.list;
       this.totalCount = parseInt( result.totalCount );
     },
-    onClickPageNum( nPageIndex ) {
+    onChangePage( nPageIndex ) {
       const params = {
         page: nPageIndex + 1
       }
