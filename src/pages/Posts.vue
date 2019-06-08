@@ -40,19 +40,30 @@ export default {
     }
   },
   mounted() {
-    const currentPage = this.$route.query.page;
-
-    if( currentPage ) {
-      const nCurrentPage = parseInt( currentPage );
-
-      if( nCurrentPage ) {
-        this.currentPageIndex = currentPage - 1;
-      }
-    }
+    this.checkPageByQuery();
 
     this.getData();
   },
   methods: {
+    checkPageByQuery() {
+      const currentPage = this.$route.query.page;
+      if( !currentPage )  return;
+
+      const nCurrentPage = parseInt( currentPage );
+      if( !nCurrentPage ) return;
+
+      if( this.totalCount < 0 ) return;
+
+      const pageIndex = nCurrentPage - 1;
+
+      const lastPageIndex = Math.floor( ( this.totalCount - 1 ) / this.MAX_ROW_COUNT );
+
+      if( pageIndex < 0 || pageIndex > lastPageIndex ) {
+        this.changeCurrentPageWithQuery( 0 );
+      } else {
+        this.currentPageIndex = pageIndex;
+      }
+    },
     getData: async function () {
       const startItemIndex = this.currentPageIndex * this.MAX_ROW_COUNT;
 
@@ -64,6 +75,11 @@ export default {
       this.totalCount = parseInt( result.totalCount );
     },
     onChangePage( nPageIndex ) {
+      this.changeCurrentPageWithQuery( nPageIndex );
+
+      this.getData();
+    },
+    changeCurrentPageWithQuery( nPageIndex ) {
       const params = {
         page: nPageIndex + 1
       }
@@ -72,8 +88,6 @@ export default {
       this.$router.replace({ query: query })
 
       this.currentPageIndex = nPageIndex;
-
-      this.getData();
     }
   }
 }
