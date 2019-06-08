@@ -1,6 +1,12 @@
 <template>
   <div>
-    <Board :dataList='list' @onChangedPageIndex='onChangedPageIndex'>
+    <Board 
+      :dataList='list' 
+      :currentPageIndex='currentPageIndex'
+      :maxRowCount='MAX_ROW_COUNT'
+      :maxPaginationCount='MAX_PAGINATION_COUNT'
+      :totalItemCount='totalCount'
+      @onClickPageNum='onClickPageNum'>
       <tr slot="tr">
         <th>id</th>
         <th>userId</th>
@@ -17,8 +23,7 @@
 <script>
 import Board from '@/components/board/Board'
 import SampleRow from '@/components/SampleRow'
-import { mapState } from 'vuex'
-import { GET_SAMPLE_LIST_ACTION } from '@/store/action-types'
+import SampleService from '@/services/SampleService'
 
 export default {
   name: 'Posts',
@@ -28,21 +33,53 @@ export default {
   },
   data() {
     return {
-      rowCount: 5
+      MAX_ROW_COUNT: 5,
+      MAX_PAGINATION_COUNT: 10,
+      list: [],
+      totalCount: 0,
+      currentPageIndex: 0
     }
   },
   computed: {
-    ...mapState({
-      list: state => state.sampleList.dataList,
-    })
+    startItemIndex() {
+      const result = this.currentPageIndex * this.MAX_ROW_COUNT;
+      return result;
+    }
+
+  },
+  mounted() {
+    const currentPage = this.$route.query.page;
+
+    if( currentPage ) {
+      const nCurrentPage = parseInt( currentPage );
+
+      if( nCurrentPage ) {
+        this.currentPageIndex = currentPage - 1;
+      }
+    }
+
+    this.getData();
   },
   methods: {
-    onChangedPageIndex( nPageIndex ) {
-      const startIndex = this.rowCount * nPageIndex;
-      
-      const urlRest = `posts?_start=${ startIndex }&_limit=${ this.rowCount }`;
+    getData: async function () {
+      const urlRest = `/posts?_start=${ this.startItemIndex }&_limit=${ this.MAX_ROW_COUNT }`;
 
-      this.$store.dispatch( GET_SAMPLE_LIST_ACTION, urlRest );
+      const result = await SampleService.shared.getData( urlRest );
+
+      this.list = result.list;
+      this.totalCount = parseInt( result.totalCount );
+    },
+    onClickPageNum( nPageIndex ) {
+      const params = {
+        page: nPageIndex + 1
+      }
+
+      let query = Object.assign({}, this.$route.query, params)
+      this.$router.replace({ query: query })
+
+      this.currentPageIndex = nPageIndex;
+
+      this.getData();
     }
   }
 }

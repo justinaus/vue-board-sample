@@ -1,5 +1,5 @@
 <template>
-  <fragment>
+  <div>
     <table>
       <thead>
         <slot name="tr" />
@@ -12,11 +12,17 @@
       </tbody>
     </table>
     <Pagination 
-      :paginationCount='paginationCount'
-      :startPageIndex='currentPageGroupIndex * paginationCount' 
-      :selectedPageIndex='currentPageIndex' 
+      :startPageIndex='startPageIndex'
+      :showPageCount='showPageCount'
+      :selectedPageIndex='currentPageIndex'
+      :enabledFirst='true'
+      :enabledEnd='true'
+      :enabledPrevPage='true'
+      :enabledNextPage='true'
+      :enabledPrevGroup='true'
+      :enabledNextGroup='true'
       @onClickPageNum='onClickPageNum' />
-  </fragment>
+  </div>
 </template>
 
 <script>
@@ -28,30 +34,41 @@ export default {
     Pagination
   },
   props: {
-    dataList: Array
+    dataList: Array,
+    currentPageIndex: Number,
+    maxRowCount: Number,
+    maxPaginationCount: Number,
+    totalItemCount: Number
   },
-  data() {
-    return {
-      currentPageIndex: -1,
-      currentPageGroupIndex: 0,
-      paginationCount: 10
+  computed: {
+    paginationGroupIndex() {
+      const result = Math.floor( this.currentPageIndex / this.maxPaginationCount );
+
+      return result;
+    },
+    startPageIndex() {
+      const result = this.paginationGroupIndex * this.maxPaginationCount;
+
+      return result;
+    },
+    showPageCount() {
+      if( this.totalItemCount === 0 ) {
+        return 0;
+      }
+      let endPageIndex = this.startPageIndex + this.maxPaginationCount - 1;
+
+      const lastItemIndex = this.totalItemCount - 1;
+
+      if( endPageIndex > lastItemIndex ) {
+        endPageIndex = lastItemIndex;
+      }
+
+      return endPageIndex - this.startPageIndex + 1;
     }
-  },
-  mounted() {
-    this.changePageNum( 0 );
   },
   methods: {
     onClickPageNum( pageIndex ) {
-      this.changePageNum( pageIndex );
-    },
-    changePageNum( pageIndex ) {
-      this.currentPageIndex = pageIndex;
-
-      this.currentPageGroupIndex = Math.floor( this.currentPageIndex / this.paginationCount );
-
-      // 값을 바꾸지 말고, 데이터가 정상인 거 확인하고 나서 인덱스를 바꾸자.
-
-      this.$emit( 'onChangedPageIndex', this.currentPageIndex );
+      this.$emit( 'onClickPageNum', pageIndex );
     }
   }
 }
