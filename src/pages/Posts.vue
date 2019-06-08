@@ -39,13 +39,6 @@ export default {
       currentPageIndex: 0
     }
   },
-  computed: {
-    startItemIndex() {
-      const result = this.currentPageIndex * this.MAX_ROW_COUNT;
-      return result;
-    }
-
-  },
   mounted() {
     const currentPage = this.$route.query.page;
 
@@ -61,7 +54,9 @@ export default {
   },
   methods: {
     getData: async function () {
-      const urlRest = `/posts?_start=${ this.startItemIndex }&_limit=${ this.MAX_ROW_COUNT }`;
+      const startItemIndex = this.currentPageIndex * this.MAX_ROW_COUNT;
+
+      const urlRest = `/posts?_start=${ startItemIndex }&_limit=${ this.MAX_ROW_COUNT }`;
 
       const result = await SampleService.shared.getData( urlRest );
 
