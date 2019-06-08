@@ -36,7 +36,7 @@ export default {
       MAX_ROW_COUNT: 5,
       MAX_PAGINATION_COUNT: 10,
       list: [],
-      totalCount: 0,
+      totalCount: -1,
       currentPageIndex: 0
     }
   },
