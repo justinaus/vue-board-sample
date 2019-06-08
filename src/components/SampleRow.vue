@@ -7,7 +7,6 @@
         {{ rowData.title }}
       <!-- </router-link> -->
     </td>
-    <td>{{ rowData.date }}</td>
   </tr>
 </template>
 
@@ -18,15 +17,11 @@ export default {
     rowData: {
       id: String,
       userId: String,
-      title: String,
-      date: String
+      title: String
     }
   }
 }
 </script>
 
 <style scoped>
-.title {
-  width: 200px;
-}
 </style>

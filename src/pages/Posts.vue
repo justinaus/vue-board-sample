@@ -11,7 +11,6 @@
         <th>id</th>
         <th>userId</th>
         <th>title</th>
-        <th>date</th>
       </tr>
       <template slot="row" slot-scope="{rowData}">
         <SampleRow :rowData="rowData"></SampleRow>
