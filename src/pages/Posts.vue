@@ -12,9 +12,11 @@
         <th>userId</th>
         <th>title</th>
       </tr>
-      <template slot="row" slot-scope="{rowData}">
-        <SampleRow :rowData="rowData"></SampleRow>
-      </template>
+      <SampleRow 
+        slot="row" 
+        v-for="item in list" 
+        :key="item.id" 
+        :rowData='item' />
     </Board>
   </div>
 </template>

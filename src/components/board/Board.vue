@@ -5,10 +5,7 @@
         <slot name="tr" />
       </thead>
       <tbody>
-        <!-- <fragment v-for="item in dataList" :key='item.id'> -->
-        <fragment v-for="(item, index) in dataList" :key='index'>
-          <slot name="row" :rowData='item'></slot>
-        </fragment>
+        <slot name="row"></slot>
       </tbody>
     </table>
     <Pagination 
