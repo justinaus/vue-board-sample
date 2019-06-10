@@ -90,14 +90,12 @@ export default {
     },
     getEndPageIndex( startPageIndex ) {
       if( this.totalItemCount < 0 ) return 0;
+
+      const lastPageIndex = this.getLastPageIndex();
       
-      let result = startPageIndex + this.maxPaginationCount - 1;
+      let maxPageIndex = startPageIndex + this.maxPaginationCount - 1;
 
-      const lastItemIndex = this.totalItemCount - 1;
-
-      if( result > lastItemIndex ) {
-        result = lastItemIndex;
-      }
+      const result = Math.min( lastPageIndex, maxPageIndex );
 
       return result;
     },
@@ -139,8 +137,5 @@ export default {
 </script>
 
 <style scoped>
-td {
-  border-bottom: 1px solid green;
-  height: 20px;
-}
+
 </style>

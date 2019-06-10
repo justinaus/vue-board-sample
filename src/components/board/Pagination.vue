@@ -6,7 +6,9 @@
     <span v-for="n in showPageCount" :key='n'>
       <button 
         :class='{ selected: selectedPageIndex === startPageIndex + n - 1 }'
-        @click="() => onClickNum( startPageIndex + n - 1 )">{{ startPageIndex + n }}</button>
+        @click="() => onClickNum( startPageIndex + n - 1 )">
+          {{ startPageIndex + n }}
+      </button>
     </span>
     <button :disabled='!enabledNextPage' @click='onClickNextPage'>next</button>
     <button :disabled='!enabledNextGroup' @click='onClickNextGroup'>&#62;</button>

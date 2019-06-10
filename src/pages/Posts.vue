@@ -1,6 +1,6 @@
 <template>
   <div>
-    <PageList>
+    <PageList apiName="/posts">
       <tr slot="tr">
         <th>id</th>
         <th>userId</th>

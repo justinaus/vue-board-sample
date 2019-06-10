@@ -25,7 +25,11 @@ const router = new Router({
     {
       path: '/post/:id',
       component: () => import('@/pages/Post.vue')
-    }
+    },
+    {
+      path: '/users',
+      component: () => import('@/pages/Users.vue')
+    },
   ]
 })
 

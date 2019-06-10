@@ -23,6 +23,9 @@ export default {
   components: {
     Board
   },
+  props: {
+    apiName: String
+  },
   data() {
     return {
       MAX_ROW_COUNT: 5,
@@ -33,7 +36,6 @@ export default {
     }
   },
   mounted() {
-    console.log( "mounted" );
     this.checkPageByQuery();
 
     this.getData();
@@ -65,7 +67,8 @@ export default {
     getData: async function () {
       const startItemIndex = this.currentPageIndex * this.MAX_ROW_COUNT;
 
-      const urlRest = `/posts?_start=${ startItemIndex }&_limit=${ this.MAX_ROW_COUNT }`;
+      // const urlRest = `/posts?_start=${ startItemIndex }&_limit=${ this.MAX_ROW_COUNT }`;
+      const urlRest = `${ this.apiName }?_start=${ startItemIndex }&_limit=${ this.MAX_ROW_COUNT }`;
 
       const result = await SampleService.shared.getData( urlRest );
 
