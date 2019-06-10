@@ -5,7 +5,7 @@
         <slot name="tr" />
       </thead>
       <tbody>
-        <slot name="row"></slot>
+        <slot name="rows"></slot>
       </tbody>
     </table>
     <Pagination 

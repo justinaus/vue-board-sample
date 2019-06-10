@@ -1,96 +1,27 @@
 <template>
   <div>
-    <Board 
-      :dataList='list' 
-      :currentPageIndex='currentPageIndex'
-      :maxRowCount='MAX_ROW_COUNT'
-      :maxPaginationCount='MAX_PAGINATION_COUNT'
-      :totalItemCount='totalCount'
-      @onChangePage='onChangePage'>
+    <PageList>
       <tr slot="tr">
         <th>id</th>
         <th>userId</th>
         <th>title</th>
       </tr>
-      <SampleRow 
-        slot="row" 
-        v-for="item in list" 
-        :key="item.id" 
-        :rowData='item' />
-    </Board>
+      <template slot="row" slot-scope="{rowData}">
+        <SampleRow :rowData="rowData"></SampleRow>
+      </template>
+    </PageList>
   </div>
 </template>
 
 <script>
-import Board from '@/components/board/Board'
+import PageList from '@/components/PageList'
 import SampleRow from '@/components/SampleRow'
-import SampleService from '@/services/SampleService'
 
 export default {
   name: 'Posts',
   components: {
-    Board,
+    PageList,
     SampleRow
-  },
-  data() {
-    return {
-      MAX_ROW_COUNT: 5,
-      MAX_PAGINATION_COUNT: 10,
-      list: [],
-      totalCount: -1,
-      currentPageIndex: 0
-    }
-  },
-  mounted() {
-    this.checkPageByQuery();
-
-    this.getData();
-  },
-  methods: {
-    checkPageByQuery() {
-      const currentPage = this.$route.query.page;
-      if( !currentPage )  return;
-
-      const nCurrentPage = parseInt( currentPage );
-      if( !nCurrentPage ) return;
-
-      if( this.totalCount < 0 ) return;
-
-      const pageIndex = nCurrentPage - 1;
-
-      const lastPageIndex = Math.floor( ( this.totalCount - 1 ) / this.MAX_ROW_COUNT );
-
-      if( pageIndex < 0 || pageIndex > lastPageIndex ) {
-        this.changeCurrentPageWithQuery( 0 );
-      } else {
-        this.currentPageIndex = pageIndex;
-      }
-    },
-    getData: async function () {
-      const startItemIndex = this.currentPageIndex * this.MAX_ROW_COUNT;
-
-      const urlRest = `/posts?_start=${ startItemIndex }&_limit=${ this.MAX_ROW_COUNT }`;
-
-      const result = await SampleService.shared.getData( urlRest );
-
-      this.list = result.list;
-      this.totalCount = parseInt( result.totalCount );
-    },
-    onChangePage( nPageIndex ) {
-      this.changeCurrentPageWithQuery( nPageIndex );
-
-      this.getData();
-    },
-    changeCurrentPageWithQuery( nPageIndex ) {
-      const params = {
-        page: nPageIndex + 1
-      }
-
-      let query = Object.assign({}, this.$route.query, params)
-      this.$router.replace({ query: query })
-
-      this.currentPageIndex = nPageIndex;
-    }
   }
 }
 </script>
