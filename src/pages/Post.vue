@@ -6,7 +6,10 @@
 
 <script>
 export default {
-  name: 'Post'
+  name: 'Post',
+  mounted() {
+    console.log( this.$route.params.id );
+  }
 }
 </script>
 
