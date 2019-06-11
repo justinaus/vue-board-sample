@@ -50,6 +50,8 @@ export default {
     showPageCount() {
       const endPageIndex = this.getEndPageIndex( this.startPageIndex );
 
+      if( endPageIndex < 0 )  return 0;
+
       const result = endPageIndex - this.startPageIndex + 1;
       return result;
     },
@@ -89,7 +91,7 @@ export default {
       return result;
     },
     getEndPageIndex( startPageIndex ) {
-      if( this.totalItemCount < 0 ) return 0;
+      if( this.totalItemCount < 0 ) return -1;
 
       const lastPageIndex = this.getLastPageIndex();
       
